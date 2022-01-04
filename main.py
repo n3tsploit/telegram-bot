@@ -1,8 +1,10 @@
 import os
+import time
 from datetime import datetime
+from pathlib import Path
+
 import telebot
 from dotenv import load_dotenv
-from pathlib import Path
 
 load_dotenv(Path(".env"))
 API_KEY = os.getenv('API_KEY')
@@ -28,13 +30,18 @@ def greetings(message):
     elif message.text.lower() in ['date', 'time', 'day', 'hour']:
         bot.reply_to(message, datetime.now())
     else:
-        bot.send_message(message.chat.id, "Love You!!!!!!. \nContact @n3tspl0it , my maker, maybe he "
-                                          "can!")
+        bot.send_message(message.chat.id, message.text)
+        time.sleep(2)
+        bot.send_message(message.chat.id, 'Just kidding!!,I can actually understand you :)')
+        time.sleep(2)
+        bot.send_message(message.chat.id, "Wait for @n3tspl0it to give me permission to respond to your message.")
+        time.sleep(1)
+        bot.send_message(message.chat.id, f'Goodbye {message.chat.first_name}, catch you later.')
 
 
 @bot.message_handler(content_types=['document', 'audio'])
 def document(message):
-    bot.reply_to(message, 'got it')
+    bot.reply_to(message, 'Got the file,thanks mate')
 
 
 bot.polling()
