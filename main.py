@@ -9,12 +9,13 @@ from dotenv import load_dotenv
 load_dotenv(Path(".env"))
 API_KEY = os.getenv('API_KEY')
 bot = telebot.TeleBot(API_KEY)
+logs = {}
 print("Running......")
 
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.chat.id, 'Welcome,Type something to get started mate!')
+    bot.send_message(message.chat.id, f'Welcome {message.chat.first_name}, Type something to get started mate!')
 
 
 @bot.message_handler(commands=['help'])
@@ -25,15 +26,20 @@ def aid(message):
 
 @bot.message_handler(func=lambda m: True)
 def greetings(message):
+    with open('logs', 'a') as f:
+        logs[message.chat.first_name] = message.text
+        f.write(str(logs))
+        f.write('\n')
+
     if message.text.lower() in ['hi', 'hey', 'hello', 'sema', 'vipi', 'niaje', 'holla']:
-        bot.send_message(message.chat.id, "Hey there, my name is Chelsea.\n""How can I be of service :).")
+        bot.send_message(message.chat.id, "Hey there, my name is Sandy.\n""How can I be of service :).")
     elif message.text.lower() in ['date', 'time', 'day', 'hour']:
         bot.reply_to(message, datetime.now())
     else:
-        bot.send_message(message.chat.id, message.text)
+        bot.send_message(message.chat.id, f'{message.text}??')
         time.sleep(2)
         bot.send_message(message.chat.id, 'Just kidding!!,I can actually understand you :)')
-        time.sleep(2)
+        time.sleep(1)
         bot.send_message(message.chat.id, "Wait for @n3tspl0it to give me permission to respond to your message.")
         time.sleep(1)
         bot.send_message(message.chat.id, f'Goodbye {message.chat.first_name}, catch you later.')
@@ -41,7 +47,7 @@ def greetings(message):
 
 @bot.message_handler(content_types=['document', 'audio'])
 def document(message):
-    bot.reply_to(message, 'Got the file,thanks mate')
+    bot.reply_to(message, 'Got the file, thanks mate')
 
 
 bot.polling()
